@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+  mysql-dev:
+    image: mysql:8.0.29
+    ports:
+      - "3306:3306"
+    container_name: mysql-dev
+    volumes:
+      - "./schema/:/docker-entrypoint-initdb.d/"
+    environment:
+      - MYSQL_DATABASE=grids-circles
+      - MYSQL_ROOT_PASSWORD=1234
+  mysql-test:
+    image: mysql:8.0.29
+    ports:
+      - "2215:3306"
+    container_name: mysql-test
+    volumes:
+      - "./schema/:/docker-entrypoint-initdb.d/"
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ROOT_PASSWORD=1234
