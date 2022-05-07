@@ -16,6 +16,7 @@ import shop.coffee.gc.repository.OrderRepository;
 @RequiredArgsConstructor
 public class OrderService {
 
+  private final OrderMapper orderMapper;
   private final OrderRepository orderRepository;
 
   public OrderDto createOrder(Email email, String address, String postcode,
@@ -31,60 +32,25 @@ public class OrderService {
         LocalDateTime.now());
 
     order = orderRepository.insert(order);
-    return new OrderDto(
-        order.getOrderId(),
-        order.getEmail().address(),
-        order.getAddress(),
-        order.getPostcode(),
-        order.getOrderItems(),
-        order.getOrderStatus(),
-        order.getCreatedAt().dateTime(),
-        order.getUpdatedAt().dateTime()
-    );
+    return orderMapper.of(order);
   }
 
   public List<OrderDto> findAll() {
     var orders = orderRepository.findAll();
-    return orders.stream().map(order -> new OrderDto(
-        order.getOrderId(),
-        order.getEmail().address(),
-        order.getAddress(),
-        order.getPostcode(),
-        order.getOrderItems(),
-        order.getOrderStatus(),
-        order.getCreatedAt().dateTime(),
-        order.getUpdatedAt().dateTime()
-    )).toList();
+    return orders.stream().map(orderMapper::of).toList();
   }
 
   public OrderDto updateOrder(UUID orderId, OrderStatus orderStatus) {
-    var order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+    var order = orderRepository.findById(orderId)
+        .orElseThrow(EntityNotFoundException::new);
     order.updateOrderStatus(orderStatus);
     order = orderRepository.update(order);
-    return new OrderDto(
-        order.getOrderId(),
-        order.getEmail().address(),
-        order.getAddress(),
-        order.getPostcode(),
-        order.getOrderItems(),
-        order.getOrderStatus(),
-        order.getCreatedAt().dateTime(),
-        order.getUpdatedAt().dateTime()
-    );
+    return orderMapper.of(order);
   }
 
   public OrderDto findById(UUID orderId) {
     var order = orderRepository.findById(orderId)
         .orElseThrow(EntityNotFoundException::new);
-    return new OrderDto(
-        order.getOrderId(),
-        order.getEmail().address(),
-        order.getAddress(),
-        order.getPostcode(),
-        order.getOrderItems(),
-        order.getOrderStatus(),
-        order.getCreatedAt().dateTime(),
-        order.getUpdatedAt().dateTime()
-    );
+    return orderMapper.of(order);
   }
 }

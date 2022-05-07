@@ -1,4 +1,4 @@
-package shop.coffee.gc;
+package shop.coffee.gc.util;
 
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;

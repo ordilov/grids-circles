@@ -1,7 +1,7 @@
 package shop.coffee.gc.repository;
 
-import static shop.coffee.gc.JdbcUtils.toLocalDateTime;
-import static shop.coffee.gc.JdbcUtils.toUUID;
+import static shop.coffee.gc.util.JdbcUtils.toLocalDateTime;
+import static shop.coffee.gc.util.JdbcUtils.toUUID;
 
 import java.util.Collections;
 import java.util.HashMap;

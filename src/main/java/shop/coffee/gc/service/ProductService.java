@@ -17,6 +17,7 @@ import shop.coffee.gc.repository.ProductRepository;
 @RequiredArgsConstructor
 public class ProductService {
 
+  private final ProductMapper productMapper;
   private final ProductRepository productRepository;
 
   public ProductDto registerProduct(
@@ -30,21 +31,12 @@ public class ProductService {
         category,
         description);
     product = productRepository.insert(product);
-    return new ProductDto(
-        product.getProductId(),
-        product.getProductName().name(),
-        product.getPrice().amount(),
-        product.getCategory(),
-        product.getDescription(),
-        product.getCreatedAt().dateTime(),
-        product.getUpdatedAt().dateTime());
+    return productMapper.of(product);
   }
 
   public List<ProductDto> findAll() {
     return productRepository.findAll().stream()
-        .map(product -> new ProductDto(product.getProductId(), product.getProductName().name(),
-            product.getPrice().amount(), product.getCategory(), product.getDescription(),
-            product.getCreatedAt().dateTime(), product.getUpdatedAt().dateTime())).toList();
+        .map(productMapper::of).toList();
   }
 
   public void deleteById(UUID productId) {
@@ -66,28 +58,12 @@ public class ProductService {
         description
     );
     product = productRepository.update(product);
-    return new ProductDto(
-        product.getProductId(),
-        product.getProductName().name(),
-        product.getPrice().amount(),
-        product.getCategory(),
-        product.getDescription(),
-        product.getCreatedAt().dateTime(),
-        product.getUpdatedAt().dateTime()
-    );
+    return productMapper.of(product);
   }
 
   public ProductDto findById(UUID productId) {
     var product = productRepository.findById(productId)
         .orElseThrow(EntityNotFoundException::new);
-    return new ProductDto(
-        product.getProductId(),
-        product.getProductName().name(),
-        product.getPrice().amount(),
-        product.getCategory(),
-        product.getDescription(),
-        product.getCreatedAt().dateTime(),
-        product.getUpdatedAt().dateTime()
-    );
+    return productMapper.of(product);
   }
 }
